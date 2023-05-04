@@ -12,19 +12,12 @@ export function main(denops: Denops) {
       ensureString(arg);
 
       // オプションを設定
-      const browser =
-        (await vars.g.get(denops, "bufpreview_browser") || undefined) as
-          | string
-          | undefined;
+      const browser = await vars.g.get(denops, "bufpreview_browser", undefined) as string;
+      const openBrowserFn = await vars.g.get(denops, "bufpreview_open_browser_fn", "") as string;
+      const host = await vars.g.get(denops, "bufpreview_server_host", "127.0.0.1") as string;
+      const port = await vars.g.get(denops, "bufpreview_server_port", 0) as number;
+
       const opener: { app?: string } = { app: browser };
-      const openBrowserFn =
-        (await vars.g.get(denops, "bufpreview_open_browser_fn") ||
-          "") as string;
-      const host = (await vars.b.get(denops, "bufpreview_server_host") ||
-        await vars.g.get(denops, "bufpreview_server_host") ||
-        "127.0.0.1") as string;
-      const port = (await vars.b.get(denops, "bufpreview_server_port") ||
-        await vars.g.get(denops, "bufpreview_server_port") || 0) as number;
 
       // サーバーを開く
       const openServer = async () => {
